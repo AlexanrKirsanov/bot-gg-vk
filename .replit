@@ -1,5 +1,6 @@
 language = "python3"
 run = "python3 main.py"
+modules = ["python-3.10"]
 
 [agent]
 expertMode = true
