@@ -1,6 +1,6 @@
 import os
 import vk_api
-from vk_api.longpoll import VkLongPoll, VkEventType
+from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -18,13 +18,19 @@ def main():
     try:
         vk_session = vk_api.VkApi(token=VK_TOKEN)
         vk = vk_session.get_api()
-        longpoll = VkLongPoll(vk_session)
+
+        group_info = vk.groups.getById()
+        group_id = group_info[0]["id"]
+        print(f"Группа: {group_info[0]['name']} (id{group_id})")
+
+        longpoll = VkBotLongPoll(vk_session, group_id)
         print("Бот Глобального Гносиса запущен...")
 
         for event in longpoll.listen():
-            if event.type == VkEventType.MESSAGE_NEW and event.to_me:
-                user_id = event.user_id
-                text = event.text.lower().strip()
+            if event.type == VkBotEventType.MESSAGE_NEW:
+                msg = event.object.message
+                user_id = msg["from_id"]
+                text = msg["text"].lower().strip()
 
                 if text in ["привет", "начать", "start", "hello"]:
                     with open("hello.info", encoding="utf-8") as f:
