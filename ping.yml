@@ -11,5 +11,5 @@ jobs:
     steps:
       - name: Ping Replit
         run: |
-          curl -X GET "https://твой-проект.твой-ник.repl.co/ping"
+          curl -s -o /dev/null -w "%{http_code}" "https://vk-bot-runner--kaaqwerty.repl.co/ping"
           echo "Pinged at $(date)"
